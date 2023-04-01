@@ -113,14 +113,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 75px;
-  height: 75px;
+  width: 175px;
+  /* height: 75px; */
   padding: 25px 10px;
   margin-left: 16px;
   transform: translateZ(0);
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: 0px 2px 8px -1px #0000001a;
+  font-weight: bold;
+  font-size: 2em;
+  cursor: pointer;
 }
 
 .thirteen::before,
