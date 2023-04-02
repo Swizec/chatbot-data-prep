@@ -5,5 +5,5 @@ export async function GET(request: Request) {
 
     const sections = await parseMdxIntoSections(filename);
 
-    return new Response("Hello, Next.js!");
+    return new Response(sections);
 }

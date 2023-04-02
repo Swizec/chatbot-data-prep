@@ -3,7 +3,7 @@ import styles from "./page.module.css";
 
 export const TheButton = () => {
     async function doTheThing() {
-        const res = await fetch("/api/the_thing").then((res) => res.text());
+        const res = await fetch("/api/the_thing").then((res) => res.json());
 
         console.log(res);
     }
