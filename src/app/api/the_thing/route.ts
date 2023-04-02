@@ -5,5 +5,5 @@ export async function GET(request: Request) {
 
     const sections = await parseMdxIntoSections(filename);
 
-    return new Response(sections);
+    return new Response(JSON.stringify(sections));
 }

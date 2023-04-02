@@ -65,5 +65,5 @@ export async function parseMdxIntoSections(filename: string) {
     const ast: Node = processor.parse(content);
     const groupedContent = groupParagraphsBySubheadings(ast);
 
-    return JSON.stringify(groupedContent, null, 2);
+    return groupedContent;
 }
