@@ -1,3 +1,4 @@
+import { writeEmbeddingsToCSV } from "./embeddingsCsv";
 import { getEmbeddings } from "./getEmbeddings";
 import { parseMdxIntoSections } from "./parseSections";
 
@@ -7,7 +8,7 @@ export async function GET(request: Request) {
     const sections = await parseMdxIntoSections(filename);
     const embeddings = await getEmbeddings(sections);
 
-    console.log(embeddings);
+    await writeEmbeddingsToCSV(embeddings);
 
     return new Response(JSON.stringify(embeddings));
 }

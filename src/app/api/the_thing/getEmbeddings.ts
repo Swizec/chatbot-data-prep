@@ -5,6 +5,10 @@ const openai = new OpenAIApi(
     new Configuration({ apiKey: process.env.OPENAI_API_KEY })
 );
 
+export type SectionWithEmbedding = Section & {
+    embedding: number[];
+};
+
 async function fetchEmbedding(input: string) {
     const embedding = await openai.createEmbedding({
         model: "text-embedding-ada-002",
@@ -14,7 +18,9 @@ async function fetchEmbedding(input: string) {
     return embedding.data.data[0].embedding;
 }
 
-async function fetchEmbeddingForSection(section: Section) {
+async function fetchEmbeddingForSection(
+    section: Section
+): Promise<SectionWithEmbedding> {
     const embedding = await fetchEmbedding(
         `Title: ${section.title}; Content: ${section.content}`
     );
