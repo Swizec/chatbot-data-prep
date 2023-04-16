@@ -1,14 +1,26 @@
+import * as glob from "glob";
 import { writeEmbeddingsToCSV } from "./embeddingsCsv";
-import { getEmbeddings } from "./getEmbeddings";
+import { SectionWithEmbedding, getEmbeddings } from "./getEmbeddings";
 import { parseMdxIntoSections } from "./parseSections";
 
 export async function GET(request: Request) {
-    const filename = `${process.cwd()}/data/______websites_swizec_com_src_pages_blog__coding-is-the-easy-part_index.mdx`;
+    const files = glob.sync(`${process.cwd()}/data/*.mdx`, {});
 
-    const sections = await parseMdxIntoSections(filename);
-    const embeddings = await getEmbeddings(sections);
+    let sectionsWithEmbeddings: SectionWithEmbedding[][] = [];
 
-    await writeEmbeddingsToCSV(embeddings);
+    for (const filename of files) {
+        console.log("doing", filename);
 
-    return new Response(JSON.stringify(embeddings));
+        const sections = await parseMdxIntoSections(filename);
+        const embeddings = await getEmbeddings(sections);
+        sectionsWithEmbeddings.push(embeddings);
+    }
+
+    await writeEmbeddingsToCSV(sectionsWithEmbeddings.flat());
+
+    return new Response(
+        JSON.stringify({
+            success: "CSV dataset created",
+        })
+    );
 }
