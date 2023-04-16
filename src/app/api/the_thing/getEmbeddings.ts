@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi, openAIApi } from "openai";
+import { Configuration, OpenAIApi } from "openai";
 import { Section } from "./parseSections";
 
 const openai = new OpenAIApi(

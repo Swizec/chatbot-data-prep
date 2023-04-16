@@ -1,26 +1,27 @@
 {
-  "name": "senior-mindset-bot",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@types/node": "18.15.11",
-    "@types/react": "18.0.31",
-    "@types/react-dom": "18.0.11",
-    "eslint": "8.37.0",
-    "eslint-config-next": "13.2.4",
-    "next": "13.2.4",
-    "openai": "^3.2.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "remark-mdx": "^2.3.0",
-    "remark-parse": "^10.0.1",
-    "typescript": "5.0.3",
-    "unified": "^10.1.2"
-  }
+    "name": "senior-mindset-bot",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "copy-blogs": "for file in $(grep -rl \"content_upgrade: SeniorMindset\" ../../websites/swizec.com/src/pages/blog/); do cp \"$file\" \"data/$(dirname \"$file\" | tr / _ | tr . _)_$(basename \"$file\")\"; done"
+    },
+    "dependencies": {
+        "@types/node": "18.15.11",
+        "@types/react": "18.0.31",
+        "@types/react-dom": "18.0.11",
+        "eslint": "8.37.0",
+        "eslint-config-next": "13.2.4",
+        "next": "13.2.4",
+        "openai": "^3.2.1",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "remark-mdx": "^2.3.0",
+        "remark-parse": "^10.0.1",
+        "typescript": "5.0.3",
+        "unified": "^10.1.2"
+    }
 }
