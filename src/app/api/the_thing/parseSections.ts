@@ -10,7 +10,7 @@ interface Paragraph {
     content: string;
 }
 
-interface Section {
+export interface Section {
     type: "section";
     title: string;
     content: string;
@@ -63,7 +63,7 @@ export async function parseMdxIntoSections(filename: string) {
     const content = fs.readFileSync(filename, "utf-8");
 
     const ast: Node = processor.parse(content);
-    const groupedContent = groupParagraphsBySubheadings(ast);
+    const groupedContent = groupParagraphsBySubheadings(ast) as Section[];
 
     return groupedContent;
 }
