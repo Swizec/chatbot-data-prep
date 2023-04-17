@@ -27,8 +27,6 @@ export const AskQuestionForm = () => {
         }
     }
 
-    console.log(answer);
-
     return (
         <form
             onSubmit={askQuestion}
