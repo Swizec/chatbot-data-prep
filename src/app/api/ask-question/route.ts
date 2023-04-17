@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from "openai";
+import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
 import { readEmbeddingsFromCSV } from "../embeddingsCsv";
 // @ts-expect-error
 import cosineSimilarity from "compute-cosine-similarity";
@@ -36,10 +36,31 @@ export async function POST(request: Request) {
     const question = await request.text();
     const relevantSections = await findRelevantSections(question);
 
+    const sectionMessages: ChatCompletionRequestMessage[] =
+        relevantSections.map((section) => ({
+            role: "system",
+            content: `Title: ${section.title}; Content: ${section.content}`,
+        }));
+
+    const messages: ChatCompletionRequestMessage[] = [
+        {
+            role: "system",
+            content: `You are SwizBot, an assistant trained on Swizec's writings. The reader is asking you a question and you found relevant sections of Swizec's articles to help you answer. Here they are in descending order of relevance`,
+        },
+        ...sectionMessages,
+        { role: "user", content: question },
+    ];
+
+    const completion = await openai.createChatCompletion({
+        model: "gpt-4",
+        messages,
+        temperature: 0.6,
+        max_tokens: 200,
+    });
+
     return new Response(
         JSON.stringify({
-            relevantSections,
-            success: "whee",
+            answer: completion.data.choices[0],
         })
     );
 }

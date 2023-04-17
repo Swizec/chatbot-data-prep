@@ -26,10 +26,10 @@ export async function readEmbeddingsFromCSV() {
     const data = [];
 
     for await (const row of readStream) {
-        const [label, description, embedding] = row;
+        const [title, content, embedding] = row;
         data.push({
-            label,
-            description,
+            title,
+            content,
             embedding: JSON.parse(embedding),
             similarity: 0,
         });
