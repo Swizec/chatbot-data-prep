@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "./page.module.css";
-import { TheButton } from "./TheButton";
+import { MakeEmbeddingsButton } from "./MakeEmbeddingsButton";
+import { AskQuestionForm } from "./AskQuestionForm";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,7 +34,8 @@ export default function Home() {
             </div>
 
             <div className={styles.center}>
-                <TheButton />
+                <AskQuestionForm />
+                {/* <MakeEmbeddingsButton /> */}
             </div>
         </main>
     );

@@ -1,16 +1,18 @@
 "use client";
 import styles from "./page.module.css";
 
-export const TheButton = () => {
+export const MakeEmbeddingsButton = () => {
     async function doTheThing() {
-        const res = await fetch("/api/the_thing").then((res) => res.json());
+        const res = await fetch("/api/make-embeddings").then((res) =>
+            res.json()
+        );
 
         console.log(res);
     }
 
     return (
         <button className={styles.thirteen} onClick={doTheThing}>
-            Do the thing
+            Make embeddings
         </button>
     );
 };

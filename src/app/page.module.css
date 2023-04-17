@@ -16,6 +16,27 @@
   width: 100%;
   z-index: 2;
   font-family: var(--font-mono);
+  flex-direction: column;
+}
+
+.description input {
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    width: 200%;
+    margin: 0.8rem;
+    text-align: center;
+}
+
+.description button {
+  padding: 10px;
+  
+  transform: translateZ(0);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0px 2px 8px -1px #0000001a;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
 }
 
 .description a {
@@ -80,13 +101,13 @@
   padding: 4rem 0;
 }
 
-.center::before {
+/* .center::before {
   background: var(--secondary-glow);
   border-radius: 50%;
   width: 480px;
   height: 360px;
   margin-left: -400px;
-}
+} */
 
 .center::after {
   background: var(--primary-glow);

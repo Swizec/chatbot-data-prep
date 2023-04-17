@@ -1,5 +1,5 @@
 import * as glob from "glob";
-import { writeEmbeddingsToCSV } from "./embeddingsCsv";
+import { writeEmbeddingsToCSV } from "../embeddingsCsv";
 import { SectionWithEmbedding, getEmbeddings } from "./getEmbeddings";
 import { parseMdxIntoSections } from "./parseSections";
 
