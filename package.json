@@ -7,7 +7,8 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "copy-blogs": "for file in $(grep -rl \"content_upgrade: SeniorMindset\" ../../websites/swizec.com/src/pages/blog/); do cp \"$file\" \"data/$(dirname \"$file\" | tr / _ | tr . _)_$(basename \"$file\")\"; done"
+        "copy-seniormindset": "for file in $(grep -rl \"content_upgrade: SeniorMindset\" ../../websites/swizec.com/src/pages/blog/); do cp \"$file\" \"data/$(dirname \"$file\" | tr / _ | tr . _)_$(basename \"$file\")\"; done",
+        "copy-all": "for file in $(grep -rl \"title: \" ../../websites/swizec.com/src/pages/blog/); do cp \"$file\" \"data/$(dirname \"$file\" | tr / _ | tr . _)_$(basename \"$file\")\"; done"
     },
     "dependencies": {
         "@types/node": "18.15.11",

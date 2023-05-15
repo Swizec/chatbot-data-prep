@@ -23,7 +23,10 @@ function groupParagraphsBySubheadings(ast: Node): ContentNode[] {
     let currentSection: Section | null = null;
 
     const visitor = (node: Node) => {
-        if (node.type === "heading" && (node as any).depth === 2) {
+        if (
+            node.type === "heading" &&
+            ((node as any).depth === 1 || (node as any).depth === 2)
+        ) {
             if (currentSection) {
                 contentNodes.push(currentSection);
             }
@@ -57,10 +60,35 @@ function groupParagraphsBySubheadings(ast: Node): ContentNode[] {
     return contentNodes;
 }
 
+function replaceFrontmatterWithTitleAndDescription(
+    mdxFileContext: string
+): string {
+    // Extract the title from the frontmatter
+    const titleRegex = /^title:\s*(.+)$/m;
+    const titleMatch = mdxFileContext.match(titleRegex);
+    const title = titleMatch ? titleMatch[1] : "";
+
+    // Extract the description from the frontmatter
+    const descriptionRegex = /^title:\s*(.+)$/m;
+    const descriptionMatch = mdxFileContext.match(descriptionRegex);
+    const description = descriptionMatch ? descriptionMatch[1] : "";
+
+    // Replace the frontmatter with the extracted title
+    const frontmatterRegex = /^---\n[\s\S]*?\n---\n/;
+    const updatedContent = mdxFileContext.replace(
+        frontmatterRegex,
+        `# ${title}\n\n${description}`
+    );
+
+    return updatedContent;
+}
+
 export async function parseMdxIntoSections(filename: string) {
     const processor = unified().use(markdown).use(mdx);
 
-    const content = fs.readFileSync(filename, "utf-8");
+    const content = replaceFrontmatterWithTitleAndDescription(
+        fs.readFileSync(filename, "utf-8")
+    );
 
     const ast: Node = processor.parse(content);
     const groupedContent = groupParagraphsBySubheadings(ast) as Section[];

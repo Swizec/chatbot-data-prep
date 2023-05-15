@@ -34,8 +34,8 @@ export default function Home() {
             </div>
 
             <div className={styles.center}>
-                <AskQuestionForm />
-                {/* <MakeEmbeddingsButton /> */}
+                {/* <AskQuestionForm /> */}
+                <MakeEmbeddingsButton />
             </div>
         </main>
     );
