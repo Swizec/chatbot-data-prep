@@ -23,6 +23,9 @@ function groupParagraphsBySubheadings(ast: Node): ContentNode[] {
     let currentSection: Section | null = null;
 
     const visitor = (node: Node) => {
+        if (!node) {
+            return;
+        }
         if (
             node.type === "heading" &&
             ((node as any).depth === 1 || (node as any).depth === 2)
@@ -32,7 +35,7 @@ function groupParagraphsBySubheadings(ast: Node): ContentNode[] {
             }
             currentSection = {
                 type: "section",
-                title: (node as any).children[0].value,
+                title: (node as any).children[0]?.value,
                 content: "",
             };
         } else if (node.type === "paragraph") {
@@ -88,7 +91,7 @@ export async function parseMdxIntoSections(filename: string) {
 
     const content = replaceFrontmatterWithTitleAndDescription(
         fs.readFileSync(filename, "utf-8")
-    );
+    ).replaceAll(/<!--.*-->/g, "");
 
     const ast: Node = processor.parse(content);
     const groupedContent = groupParagraphsBySubheadings(ast) as Section[];

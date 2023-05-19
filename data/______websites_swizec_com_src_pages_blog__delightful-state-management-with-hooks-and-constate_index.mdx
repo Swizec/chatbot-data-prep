@@ -3,7 +3,7 @@ title: "Delightful state management with hooks and Constate"
 description: ""
 published: 2019-01-16
 redirect_from:
-  - /blog/delightful-state-management-with-hooks-and-constate/swizec/8876
+    - /blog/delightful-state-management-with-hooks-and-constate/swizec/8876
 categories: "Front End, Technical"
 hero: ./img/techletter.app-screenshot-1547664644055.png
 ---
@@ -32,27 +32,31 @@ Contrary to popular belief, you don't need complex state management to build a l
 class Field extends React.Component {
     state = {
         value: "",
-        error: ""
-    }
-    onChange = event => this.setState({
-        value: event.target.value
-    }, this.validate);
+        error: "",
+    };
+    onChange = (event) =>
+        this.setState(
+            {
+                value: event.target.value,
+            },
+            this.validate
+        );
     validate = () => {
         const { value } = this.state;
         if (!someValidationRequirement(value)) {
             this.setState({
-                error: "My lovely error"
-            })
+                error: "My lovely error",
+            });
         }
-    }
+    };
     render() {
         const { value, error } = this.state;
         return (
             <>
-                <input value={value} onchange={this.onChange}>
+                <input value={value} onchange={this.onChange} />
                 {error}
-
-        )
+            </>
+        );
     }
 }
 ```
@@ -65,15 +69,15 @@ A login form can reuse this field twice.
 
 ```javascript
 class Login extends React.Component {
-  render() {
-    return (
-      <div>
-        <field>
-          <field></field>
-        </field>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <field>
+                    <field></field>
+                </field>
+            </div>
+        );
+    }
 }
 ```
 
@@ -90,10 +94,11 @@ Something like this, then 👇
 ```javascript
 const Field = ({ onChange, value, error }) => (
     <>
-        <input value={value} onchange={onChange}>
+        <input value={value} onchange={onChange}/>
         {error}
-
+    </>
 )
+
 class Login extends React.Component {
     state = {
         user: {
@@ -146,14 +151,13 @@ class Login extends React.Component {
         const { user, pass, error } = this.state;
         return (
             <form>
-                <field value={user.value} error={user.error} onchange={this.onChangeUser}>
-                <field value={pass.value} error={pass.error} onchange={this.onChangePass}>
+                <Field value={user.value} error={user.error} onchange={this.onChangeUser}/>
+                <Field value={pass.value} error={pass.error} onchange={this.onChangePass}/>
                 {error}
-
+            </form>
         )
     }
 }
-</field></field></form>
 ```
 
 Pretty repetitive, I agree. But it works and you didn't need no library.
@@ -197,20 +201,20 @@ class Field extends React.Component {
         const { value, error } = this.state;
         return (
             <>
-                <input value={value} onchange={this.onChange}>
+                <input value={value} onChange={this.onChange}/>
                 {error}
-
+            </>
         )
     }
 }
-const ContextField = ({ name }) => (
-    <formcontext class="consumer">
-        {(state) => (
-            <field value={name} returnvalue="{value" ==""> state.onChange(value, name) />
-        )}
 
-)<br>
-</field></formcontext>
+const ContextField = ({ name }) => (
+    <FormContext class="consumer">
+        {(state) => (
+            <Field value={name} returnValue={value ==""} state.onChange(value, name) />
+        )}
+    </FormContext>
+)
 ```
 
 Same smart form field as we had before. It takes care of validation and temp value keeping internally. When it's happy it returns the verified value to the form with the `this.props.returnValue` method.
@@ -223,36 +227,36 @@ The Login form then looks like this:
 
 ```javascript
 class Login extends React.Component {
-  state = {
-    user: "",
-    pass: "",
-    error: "",
-    onChange: (value, field) =>
-      this.setState(
-        {
-          [field]: value,
-        },
-        this.validate
-      ),
-  };
-  validate = () => {
-    const { user, pass } = this.state;
-    if (!someValidation(user) || !someValidation(pass)) {
-      this.setState({
-        error: "A lovely form error",
-      });
+    state = {
+        user: "",
+        pass: "",
+        error: "",
+        onChange: (value, field) =>
+            this.setState(
+                {
+                    [field]: value,
+                },
+                this.validate
+            ),
+    };
+    validate = () => {
+        const { user, pass } = this.state;
+        if (!someValidation(user) || !someValidation(pass)) {
+            this.setState({
+                error: "A lovely form error",
+            });
+        }
+    };
+    render() {
+        const { error } = this.state;
+        return (
+            <FormContext class="provider" value={this.state}>
+                <ContextField name="user">
+                    <ContextField name="pass">{error}</ContextField>
+                </ContextField>
+            </FormContext>
+        );
     }
-  };
-  render() {
-    const { error } = this.state;
-    return (
-      <formcontext class="provider" value={this.state}>
-        <contextfield name="user">
-          <contextfield name="pass">{error}</contextfield>
-        </contextfield>
-      </formcontext>
-    );
-  }
 }
 ```
 
@@ -281,8 +285,8 @@ const Field = ({ value, returnValue }) => {
     }, [state])
     return (
         <>
-            <input value={state} onchange="{event" ==""> setState(event.target.value)} />
-
+            <input value={state} onChange={event ==""}> setState(event.target.value)} />
+        </>
     )
 }
 ```
@@ -297,7 +301,7 @@ You can replicate the rest of our setup with `useContext`. You'll wind up with s
 
 Rather than messing around with `useContext`, I suggest using [Constate](https://github.com/diegohaz/constate). It was already my favorite library a few months ago when it was just for modern React Context.
 
-\[<https://www.youtube.com/watch?v=63UI2nTz1qA>]
+https://www.youtube.com/watch?v=63UI2nTz1qA
 
 With the change to hooks it became truly amaze.
 
@@ -327,13 +331,11 @@ function Error() {
     )
 }
 function Login() {
-    <contextfield class="provider">
-        <contextfield name="user">
-        <contextfield name="pass">
-        <error>
-    </error></contextfield></contextfield></contextfield>
+    <ContextField class="provider" />
+    <ContextField name="user" />
+    <ContextField name="pass"/>
+    <Error />
 }
-</field>
 ```
 
 😱

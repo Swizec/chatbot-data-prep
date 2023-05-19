@@ -1,5 +1,6 @@
 import { Configuration, OpenAIApi } from "openai";
 import { Section } from "./parseSections";
+import retry from "async-retry";
 
 const openai = new OpenAIApi(
     new Configuration({ apiKey: process.env.OPENAI_API_KEY })
@@ -21,8 +22,17 @@ async function fetchEmbedding(input: string) {
 async function fetchEmbeddingForSection(
     section: Section
 ): Promise<SectionWithEmbedding> {
-    const embedding = await fetchEmbedding(
-        `Title: ${section.title}; Content: ${section.content}`
+    const embedding = await retry(
+        async () =>
+            await fetchEmbedding(
+                `Title: ${section.title}; Content: ${section.content}`
+            ),
+        {
+            retries: 5,
+            factor: 2,
+            minTimeout: 500,
+            maxTimeout: 10000,
+        }
     );
 
     return {

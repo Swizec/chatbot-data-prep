@@ -3,7 +3,7 @@ title: "Livecoding Recap 47: Webpack build progress indicator for Mac Touchbar"
 description: ""
 published: 2017-09-18
 redirect_from:
-  - /blog/livecoding-recap-47-webpack-build-progress-indicator-mac-touchbar/swizec/7808
+    - /blog/livecoding-recap-47-webpack-build-progress-indicator-mac-touchbar/swizec/7808
 categories: "Livecoding, Technical"
 hero: ../../../defaultHero.jpg
 ---
@@ -22,8 +22,8 @@ https://twitter.com/Swizec/status/909565004642316288
 
 You can start using it right now. All you need is an expensive laptop, my [Touchbar Nyancat Webpack Progress app](https://github.com/Swizec/touchbar_webpack_progress), and my fork of [nyan-progress-webpack-plugin](https://github.com/Swizec/nyan-progress-webpack-plugin/tree/send-progress-to-touchbar). Both are on Github.
 
-- [Download the app](https://github.com/Swizec/touchbar_webpack_progress), run it. Set it up to run at startup, if you want to be fancy.
-- Add my nyan-progress-webpack-plugin to your `package.json`. I'll try to convince @alexkuz to merge it into his published package. When that happens, this step will be easier.
+-   [Download the app](https://github.com/Swizec/touchbar_webpack_progress), run it. Set it up to run at startup, if you want to be fancy.
+-   Add my nyan-progress-webpack-plugin to your `package.json`. I'll try to convince @alexkuz to merge it into his published package. When that happens, this step will be easier.
 
 ```javascript
 // package.json
@@ -39,22 +39,22 @@ Then run installation:
 
 Now you have my progress indicator. It can talk to your Touchbar when the app from step 1 is running.
 
-- Update your Webpack config.
+-   Update your Webpack config.
 
 ```javascript
 // webpack.config.js
 
 plugins: [
-  // ...
-  new require("nyan-progress-webpack-plugin")({
-    sendProgressToTouchbar: true,
-  }),
+    // ...
+    new require("nyan-progress-webpack-plugin")({
+        sendProgressToTouchbar: true,
+    }),
 ];
 ```
 
 This enables a Nyan Cat webpack progress indicator in your terminal and tells it to send progress to the touchbar as well. It's behind a feature flag so @alexkuz doesn't get too upset when I make a pull request. Kind of a silly feature :)
 
-- Voilà! Enjoy your Touchbar Progress indicator.
+-   Voilà! Enjoy your Touchbar Progress indicator.
 
 ## Here's how it works
 
@@ -69,7 +69,8 @@ The native app runs a web server built with [Swifter](https://github.com/httpswi
 
 We added these lines to what looks like the most important Nyan cat file – `NyanCatCanvas.swift`.
 
-    <code class="swift">// NyanCatCanvas.swift
+```swift
+// NyanCatCanvas.swift
 
     func downloadImage() {
         // stuff that downloads nyan gif
@@ -95,6 +96,7 @@ We added these lines to what looks like the most important Nyan cat file – `Ny
         }
         }
     }
+```
 
 We start the server listening on port `12345` with `server.start(12345)` and add a route for `/progress/:progress`. We're listening to GET request on `localhost:12345/progress/<number>`. Those call `updateProgress()`.
 

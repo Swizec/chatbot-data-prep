@@ -3,12 +3,12 @@ title: "How to debug unified, rehype, or remark and fix bugs in markdown process
 description: ""
 published: 2020-08-17
 redirect_from:
-  - /blog/?p=9478
+    - /blog/?p=9478
 categories: "Computer Science"
 hero: ./img/techletter.app-screenshot-1597679792741.png
 ---
 
-Ever had to debug a compiler {{ subscriber.first_name | truncatewords: 1, "" | capitalize }}? It's hard.
+Ever had to debug a compiler? It's hard.
 
 Typical engineering wisdom goes that if you blame the compiler, you're wrong. You messed up and can't figure it out and it is _not the compiler's fault_.
 
@@ -42,8 +42,7 @@ class ReportSize extends React.Component {
 
 And you get this output:
 
-```text
-``javascript
+```javascript
 class ReportSize extends React.Component {
   refCallback = element => {
     if (element) {
@@ -53,13 +52,12 @@ class ReportSize extends React.Component {
 
   render() {
     return (
-    
+
         {faker.lorem.paragraphs(Math.random() * 10)}
 
     );
   }
 }
-``
 ```
 
 But you're supposed to get this:
@@ -75,7 +73,7 @@ class ReportSize extends React.Component {
 
   render() {
     return (
-    
+
         {faker.lorem.paragraphs(Math.random() * 10)}
 
     );
@@ -114,24 +112,24 @@ Every plugin calls another plugin. 😅
 
 General lay of the land is that:
 
-- [unified](https://github.com/unifiedjs/unified) is the protocol that holds it all together
-- [rehype](https://github.com/rehypejs/rehype) is the plugin ecosystem for HTML parsing/rendering
-- [remark](https://github.com/remarkjs/remark) is the plugin ecosystem for Markdown parsing/rendering
+-   [unified](https://github.com/unifiedjs/unified) is the protocol that holds it all together
+-   [rehype](https://github.com/rehypejs/rehype) is the plugin ecosystem for HTML parsing/rendering
+-   [remark](https://github.com/remarkjs/remark) is the plugin ecosystem for Markdown parsing/rendering
 
 A basic example that parses HTML and spits out Markdown goes like this:
 
 ```javascript
-import parse from 'rehype-parse'
-import rehype2remark from 'rehype-remark'
-import stringify from 'remark-stringify'
+import parse from "rehype-parse";
+import rehype2remark from "rehype-remark";
+import stringify from "remark-stringify";
 
 unified() // initiate the pipeline
-	.use(parse) // parse HTML to AST
-	.use(rehype2remark) // translate Rehype AST to Remark AST
-	.use(stringify) // stringify AST to markdown
-	.process(inputHTML, (err, markdown) => {
-		console.log(markdown)
-	})
+    .use(parse) // parse HTML to AST
+    .use(rehype2remark) // translate Rehype AST to Remark AST
+    .use(stringify) // stringify AST to markdown
+    .process(inputHTML, (err, markdown) => {
+        console.log(markdown);
+    });
 ```
 
 ## How you debug a compiler
@@ -177,7 +175,7 @@ function debugCodeBlocks() {
         if (node.tagName === "pre") {
             nodes.push(node); // <pre> nodes are code blocks
         } else if (node.children) {
-		        // recursively walk through child nodes
+            // recursively walk through child nodes
             for (let child of node.children) {
                 nodes.push(...findCodeBlocks(child));
             }
@@ -185,15 +183,15 @@ function debugCodeBlocks() {
 
         return nodes;
     }
-    
-    return tree => {
-	    const codeBlocks = findCodeBlocks(tree)
-	    
-	    // deep print the codeBlocks array
-	    console.log(require("util").inspect(tree, false, null, true));
-	    
-	    return tree;
-    }
+
+    return (tree) => {
+        const codeBlocks = findCodeBlocks(tree);
+
+        // deep print the codeBlocks array
+        console.log(require("util").inspect(tree, false, null, true));
+
+        return tree;
+    };
 }
 ```
 
@@ -274,9 +272,7 @@ function fixCodeBlocks() {
             };
 
             // replace children with my fakes
-            block.children = [
-                
-            ];
+            block.children = [];
         }
 
         return tree;
@@ -301,7 +297,7 @@ Find all the code blocks, replace their children with a fake new child.
     },
     children: [
         // stringify the full <pre> block
-        // as a text child of the new <code> block                    
+        // as a text child of the new <code> block
         {
             type: "text",
             // hast-util-to-html, Rehype's stringifier
@@ -320,8 +316,7 @@ Make the child a `<code>` block because Remark likes that better and stringify t
 
 You get:
 
-```text
-``javascript
+```javascript
 class ReportSize extends React.Component {
   refCallback = element => {
     if (element) {
@@ -337,7 +332,6 @@ class ReportSize extends React.Component {
     );
   }
 }
-``
 ```
 
 Not perfect, but better. Need to fix the child html nodes or find a JSX stringifier 🤔

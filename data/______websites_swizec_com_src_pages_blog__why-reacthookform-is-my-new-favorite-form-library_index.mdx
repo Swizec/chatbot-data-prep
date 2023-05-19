@@ -3,7 +3,7 @@ title: "Why react-hook-form is my new favorite form library"
 description: ""
 published: 2020-08-03
 redirect_from:
-  - /blog/why-react-hook-form-is-my-new-favorite-form-library/swizec/9467
+    - /blog/why-react-hook-form-is-my-new-favorite-form-library/swizec/9467
 categories: "Front End, Technical, React"
 content_upgrade: ReactCU
 hero: ./img/techletter.app-screenshot-1596468655693.png
@@ -16,14 +16,14 @@ You've seen this pattern in every React tutorial with form fields:
 https://codesandbox.io/s/jovial-khorana-63819
 
 ```javascript
-const [firstName, setFirstName] = useState("")
+const [firstName, setFirstName] = useState("");
 
 // ...
-;<input
-  name="firstName"
-  value={firstName}
-  onChange={(event) => setFirstName(event.target.value)}
-/>
+<input
+    name="firstName"
+    value={firstName}
+    onChange={(event) => setFirstName(event.target.value)}
+/>;
 ```
 
 A controlled input. Gets value from state, updates value on change. Works great 👍
@@ -35,20 +35,20 @@ Then you add more fields ...
 https://codesandbox.io/s/hardcore-colden-viz62
 
 ```javascript
-const [firstName, setFirstName] = useState("")
-const [lastName, setLastName] = useState("")
-const [address1, setAddress1] = useState("")
-const [address2, setAddress2] = useState("")
-const [city, setCity] = useState("")
-const [zip, setZip] = useState("")
-const [state, setState] = useState("")
+const [firstName, setFirstName] = useState("");
+const [lastName, setLastName] = useState("");
+const [address1, setAddress1] = useState("");
+const [address2, setAddress2] = useState("");
+const [city, setCity] = useState("");
+const [zip, setZip] = useState("");
+const [state, setState] = useState("");
 ```
 
 That sure blew up 😅
 
 State up the wazoo, re-renders on any field change, and you haven't even thought about validation, error states, dirty states, and all the rest that goes into a form.
 
-You're smart and you can make this work. I know you can {{ subscriber.first_name | truncatewords: 1, "" | capitalize }}.
+You're smart and you can make this work. I know you can .
 
 But imagine a monster form like I was dealing with last week.
 
@@ -64,13 +64,13 @@ Helper component, a loop or two, and off you go, right?
 
 ```javascript
 const Input = ({ name, value, setValue, placeholder }) => (
-  <input
-    name={name}
-    value={value}
-    placeholder={placeholder}
-    onChange={(event) => setValue(event.target.value)}
-  />
-)
+    <input
+        name={name}
+        value={value}
+        placeholder={placeholder}
+        onChange={(event) => setValue(event.target.value)}
+    />
+);
 ```
 
 https://codesandbox.io/s/friendly-hypatia-j27ck
@@ -87,31 +87,31 @@ https://codesandbox.io/s/recursing-bogdan-i2c4x
 
 ```javascript
 const [
-  { firstName, lastName, address1, address2, city, zip, state },
-  setState,
+    { firstName, lastName, address1, address2, city, zip, state },
+    setState,
 ] = useState({
-  firstName: "",
-  lastName: "",
-  address1: "",
-  address2: "",
-  city: "",
-  zip: "",
-  state: "",
-})
+    firstName: "",
+    lastName: "",
+    address1: "",
+    address2: "",
+    city: "",
+    zip: "",
+    state: "",
+});
 
 function valueSetter(name) {
-  return (value) =>
-    setState((formState) => {
-      return {
-        ...formState,
-        [name]: value,
-      }
-    })
+    return (value) =>
+        setState((formState) => {
+            return {
+                ...formState,
+                [name]: value,
+            };
+        });
 }
 
 // ...
 
-;<Input name="lastName" value={lastName} setValue={valueSetter("lastName")} />
+<Input name="lastName" value={lastName} setValue={valueSetter("lastName")} />;
 ```
 
 Your form state lives inside an object – one key per field. You can always see current state and you always know what's going on.
@@ -132,10 +132,10 @@ _PS: dirty fields are fields that changed and the value hasn't been saved yet_
 
 It's a hook-based form solution that takes care of:
 
-- managing state
-- errors
-- dirty fields
-- validations
+-   managing state
+-   errors
+-   dirty fields
+-   validations
 
 _And_ minimizes re-renders by avoiding controlled inputs.
 
@@ -148,13 +148,13 @@ https://codesandbox.io/s/staging-lake-gg7zm
 State management turns into this:
 
 ```javascript
-const { register, handleSubmit } = useForm()
+const { register, handleSubmit } = useForm();
 ```
 
 Setting up a field turns into this:
 
 ```javascript
-const Input = ({ name, register }) => <input name={name} ref={register} />
+const Input = ({ name, register }) => <input name={name} ref={register} />;
 ```
 
 The `register` method returns a React ref and sets up the form machinery.
@@ -169,21 +169,21 @@ https://codesandbox.io/s/shy-leftpad-c82j0
 
 ```javascript
 const Input = ({ name, register, errors, placeholder }) => (
-  <>
-    <input
-      name={name}
-      ref={register({ minLength: 5 })}
-      placeholder={placeholder}
-    />
-    {errors && <span>{name} is invalid</span>}
-  </>
-)
+    <>
+        <input
+            name={name}
+            ref={register({ minLength: 5 })}
+            placeholder={placeholder}
+        />
+        {errors && <span>{name} is invalid</span>}
+    </>
+);
 
 // ...
-const { register, handleSubmit, errors } = useForm()
+const { register, handleSubmit, errors } = useForm();
 
 // ...
-;<Input name="firstName" register={register} errors={errors.firstName} />
+<Input name="firstName" register={register} errors={errors.firstName} />;
 ```
 
 By default validations run on change.
@@ -194,8 +194,8 @@ And you can change that with a line of code 😍
 
 ```javascript
 const { register, handleSubmit, errors } = useForm({
-  mode: "onBlur",
-})
+    mode: "onBlur",
+});
 ```
 
 ![](./img/DnFojjm.gif)
@@ -208,9 +208,9 @@ That's why react-hook-form supports context.
 
 Using the same approach as my [Wormhole state management](https://swizec.com/blog/wormhole-state-management/) article:
 
-- create a form
-- put everything in context
-- wormhole to context with a hook
+-   create a form
+-   put everything in context
+-   wormhole to context with a hook
 
 You get form components that magically connect to your form. Register themselves, know about errors, dirty states. Everything 😍
 
@@ -220,19 +220,19 @@ https://codesandbox.io/s/optimistic-euclid-46ifb
 
 ```javascript
 const Input = ({ name, placeholder }) => {
-  const { register, errors } = useFormContext()
+    const { register, errors } = useFormContext();
 
-  return (
-    <>
-      <input
-        name={name}
-        ref={register({ minLength: 2 })}
-        placeholder={placeholder}
-      />
-      {errors[name] && <span>{name} is invalid</span>}
-    </>
-  )
-}
+    return (
+        <>
+            <input
+                name={name}
+                ref={register({ minLength: 2 })}
+                placeholder={placeholder}
+            />
+            {errors[name] && <span>{name} is invalid</span>}
+        </>
+    );
+};
 ```
 
 Every field validates a 2 character `minLength` and displays its own errors.
@@ -271,23 +271,23 @@ Write a Yup schema describing the shape of your data. Bit of an art to it, make 
 
 ```javascript
 const schema = yup.object().shape({
-  firstName: yup.string(),
-  lastName: yup.string(),
-  address1: yup.string(),
-  address2: yup.string(),
-  city: yup.string().when("address1", {
-    is: (address1) => address1.length > 0,
-    then: yup.string().required(),
-  }),
-  state: yup.string().when("address1", {
-    is: (address1) => address1.length > 0,
-    then: yup.string().required(),
-  }),
-  zip: yup.string().when("address1", {
-    is: (address1) => address1.length > 0,
-    then: yup.string().required(),
-  }),
-})
+    firstName: yup.string(),
+    lastName: yup.string(),
+    address1: yup.string(),
+    address2: yup.string(),
+    city: yup.string().when("address1", {
+        is: (address1) => address1.length > 0,
+        then: yup.string().required(),
+    }),
+    state: yup.string().when("address1", {
+        is: (address1) => address1.length > 0,
+        then: yup.string().required(),
+    }),
+    zip: yup.string().when("address1", {
+        is: (address1) => address1.length > 0,
+        then: yup.string().required(),
+    }),
+});
 ```
 
 The Yup docs are _okay_, not stellar. I recommend tinkering until it works.
@@ -296,9 +296,9 @@ Then you tell react-hook-form about your schema:
 
 ```javascript
 const formMethods = useForm({
-  mode: "onChange",
-  resolver: yupResolver(schema),
-})
+    mode: "onChange",
+    resolver: yupResolver(schema),
+});
 ```
 
 And change your `register` call back to vanilla:

@@ -3,7 +3,7 @@ title: "Livecoding #14: Mostly-smooth animation up to 4,000 elements with React 
 description: ""
 published: 2016-07-13
 redirect_from:
-  - /blog/livecoding-14-mostly-smooth-animation-up-to-4000-elements-with-react-and-canvas/swizec/6864
+    - /blog/livecoding-14-mostly-smooth-animation-up-to-4000-elements-with-react-and-canvas/swizec/6864
 categories: "Front End, konva, react, react+d3js, reactjs, Technical"
 hero: ../../../defaultHero.jpg
 ---
@@ -24,7 +24,8 @@ It’s a garbage collection problem in a way. Animation works well the first tim
 
 The meat of our code looks like this:
 
-    <code class="javascript">componentDidUpdate() {
+```javascript
+componentDidUpdate() {
             let layer = this.refs.the_thing,
                 particles = this.props.particles,
             for (let i = 0; i < particles.length; i++) {
@@ -50,6 +51,7 @@ The meat of our code looks like this:
             };
 
             layer.batchDraw();
+```
 
 Lovely. `new Circle` creates a particle, `.position` updates its position. `layer.batchDraw` does drawing stuff with the [Konva](http://konvajs.github.io/) library.
 

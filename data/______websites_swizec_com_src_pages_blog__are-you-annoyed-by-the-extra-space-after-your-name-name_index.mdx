@@ -70,19 +70,19 @@ Like this:
 const nameOrFriend = /^\s*name\s*\|(.*)$/;
 
 export function remarkNameOrFriend() {
-  return (tree) => {
-    visit(tree, "linkReference", (node, index, parent) => {
-      if (node.label.match(nameOrFriend)) {
-        node.type = "text";
+    return (tree) => {
+        visit(tree, "linkReference", (node, index, parent) => {
+            if (node.label.match(nameOrFriend)) {
+                node.type = "text";
 
-        node.value = node.label.replace(
-          nameOrFriend,
-          '{% if subscriber.first_name != blank %} {{ subscriber.first_name | truncatewords: 1, "" | capitalize }} {% else %} $1 {% endif %}'
-        );
-        node.children = null;
-      }
-    });
-  };
+                node.value = node.label.replace(
+                    nameOrFriend,
+                    '{% if subscriber.first_name != blank %} {{ subscriber.first_name | truncatewords: 1, "" | capitalize }} {% else %} $1 {% endif %}'
+                );
+                node.children = null;
+            }
+        });
+    };
 }
 ```
 
@@ -90,13 +90,17 @@ Can you spot the bug?
 
 It's right here:
 
+```liquid
     '{% if subscriber.first_name != blank %} {{ subscriber.first_name | truncatewords: 1, "" | capitalize }} {% else %} $1 {% endif %}'
+```
 
 That has spaces between the liquid tags 🤣
 
 Needs to be:
 
+```liquid
     '{% if subscriber.first_name != blank %}{{ subscriber.first_name | truncatewords: 1, "" | capitalize }}{% else %}$1{% endif %}'
+```
 
 And that's the bug that took me 919 days to fix.
 

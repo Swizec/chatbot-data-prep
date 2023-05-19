@@ -4,12 +4,12 @@ description: "The Big Mac index is a purchasing power parity index published by 
 published: 2019-08-22
 content_upgrade: FullstackWeb
 redirect_from:
-  - /blog/the-big-mac-index-and-jest-fetch-testing/swizec/9187
+    - /blog/the-big-mac-index-and-jest-fetch-testing/swizec/9187
 categories: "Frontend Web, JavaScript, Technical"
 hero: ./img/techletter.app-screenshot-1566489636202.png
 ---
 
-import { ContentUpgrades } from "@swizec/gatsby-theme-course-platform"
+import { ContentUpgrades } from "@swizec/gatsby-theme-course-platform";
 
 The Big Mac index is a purchasing power parity index published by The Economist. Jest fetch testing is a tech task so frustrating that it almost made me quit the industry.
 
@@ -72,11 +72,11 @@ Configure Jest in a `jest.config.js` file. There's a bunch of info out there on 
 // jest.config.js
 
 module.exports = {
-  roots: ["./src"],
-  transform: {
-    "^.+\\.tsx?$": "ts-jest",
-  },
-}
+    roots: ["./src"],
+    transform: {
+        "^.+\\.tsx?$": "ts-jest",
+    },
+};
 ```
 
 We're saying code lives in a `/src` directory and that typescript files should run with `ts-jest`.
@@ -94,10 +94,10 @@ To use `fetch-mock` instead of `isomorphic-fetch` in your tests, create a file l
 ```javascript
 // src/__mocks__/isomorphic-fetch
 
-const fetchMock = require("fetch-mock")
+const fetchMock = require("fetch-mock");
 
-const fetch = fetchMock.sandbox()
-module.exports = fetch
+const fetch = fetchMock.sandbox();
+module.exports = fetch;
 ```
 
 This means that every time you import `isomorphic-fetch` in a test file, it will instead import a sandboxed `fetch-mock` instance. You can add any other setup you want here. Anything you need for your mocks to work correctly.
@@ -182,44 +182,44 @@ TDD says to write your test first and your code second, but I actually wrote the
 ```typescript
 // src/index.ts
 
-const fetch = require("isomorphic-fetch")
+const fetch = require("isomorphic-fetch");
 
 export class ParityPrice {
-  ipstack_key: string
+    ipstack_key: string;
 
-  constructor(ipstack_key: string, enable_ssl: boolean = false) {
-    this.ipstack_key = ipstack_key
-  }
+    constructor(ipstack_key: string, enable_ssl: boolean = false) {
+        this.ipstack_key = ipstack_key;
+    }
 
-  private async ipstack(IP?: string) {
-    const param = IP ? IP : "check"
+    private async ipstack(IP?: string) {
+        const param = IP ? IP : "check";
 
-    const res = await fetch(
-      `http://api.ipstack.com/check?access_key=${this.ipstack_key}`
-    )
-    return res.json()
-  }
+        const res = await fetch(
+            `http://api.ipstack.com/check?access_key=${this.ipstack_key}`
+        );
+        return res.json();
+    }
 
-  private _price(USAprice: number, location: any): number {
-    const pricePerBurger = USAprice / BigMacIndex["United States"]
+    private _price(USAprice: number, location: any): number {
+        const pricePerBurger = USAprice / BigMacIndex["United States"];
 
-    let fairPrice = USAprice
+        let fairPrice = USAprice;
 
-    if (location.country_name in BigMacIndex) {
-      fairPrice = Math.round(
-        pricePerBurger * BigMacIndex[location.country_name]
-      )
-    } // ... a few other hacks
+        if (location.country_name in BigMacIndex) {
+            fairPrice = Math.round(
+                pricePerBurger * BigMacIndex[location.country_name]
+            );
+        } // ... a few other hacks
 
-    return fairPrice
-  }
+        return fairPrice;
+    }
 
-  async price(USAprice: number, IP?: string): Promise<number> {
-    const location = await this.ipstack(IP)
-    const fairPrice = this._price(USAprice, location)
+    async price(USAprice: number, IP?: string): Promise<number> {
+        const location = await this.ipstack(IP);
+        const fairPrice = this._price(USAprice, location);
 
-    return fairPrice
-  }
+        return fairPrice;
+    }
 }
 ```
 
@@ -233,7 +233,7 @@ The full version has some continent-based conversions when a country isn't found
 
 ## Purchasing power parity on reactfordataviz.com
 
-You can see [Big Mac Index](https://en.wikipedia.org/wiki/Big_Mac_Index) purchasing power parity in action on <https://reactfordataviz-staging.swizec.now.sh/>. Scroll down and you'll see a custom price for your location.
+You can see [Big Mac Index](https://en.wikipedia.org/wiki/Big_Mac_Index) purchasing power parity in action on https://reactfordataviz-staging.swizec.now.sh/. Scroll down and you'll see a custom price for your location.
 
 Don't click the button yet though. I haven't wired up the adjusted prices with Gumroad yet.
 

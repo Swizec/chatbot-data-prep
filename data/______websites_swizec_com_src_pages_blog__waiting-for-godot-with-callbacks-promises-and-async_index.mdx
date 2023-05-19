@@ -3,7 +3,7 @@ title: "Waiting for Godot with callbacks, promises, and async"
 description: ""
 published: 2018-11-16
 redirect_from:
-  - /blog/waiting-godot-callbacks-promises-async/swizec/8737
+    - /blog/waiting-godot-callbacks-promises-async/swizec/8737
 categories: "Front End, Technical"
 hero: ../../../defaultHero.jpg
 ---
@@ -28,9 +28,11 @@ JavaScript uses the [event loop execution model](https://developer.mozilla.org/e
 
 Once a message shows up, the engine processes it in full, then waits for the next one. Something like this:
 
+```
     while (queue.waitForMessage()) {
       queue.processNextMessage();
     }
+```
 
 Everything is an event. Your main code, your click handlers, user interactions, talking to an API, timeouts. All comes to the JavaScript engine as an event.
 
@@ -154,9 +156,9 @@ That's gonna be fun to play with so I can show you how it works.
 
 To recap:
 
-- **callbacks** are great, you're using them even if you think you aren't
-- **promises** make callbacks easier to chain, a little easier to read, and much better to pass around your code
-- **async/await** makes your code look linear so it's even more easier to read. You always know when some code is waiting for a result from some other code
+-   **callbacks** are great, you're using them even if you think you aren't
+-   **promises** make callbacks easier to chain, a little easier to read, and much better to pass around your code
+-   **async/await** makes your code look linear so it's even more easier to read. You always know when some code is waiting for a result from some other code
 
 ![](https://l56spuxk1t14k3seci6s2bja-wpengine.netdna-ssl.com/wp-content/uploads/GIF/2014/10/Savvy-GIF.gif)
 

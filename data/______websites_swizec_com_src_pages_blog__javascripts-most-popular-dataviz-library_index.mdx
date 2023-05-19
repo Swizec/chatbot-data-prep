@@ -3,7 +3,7 @@ title: "JavaScript’s most popular dataviz library"
 description: ""
 published: 2019-02-26
 redirect_from:
-  - /blog/javascripts-most-popular-dataviz-library/swizec/8962
+    - /blog/javascripts-most-popular-dataviz-library/swizec/8962
 categories: "Front End, Technical"
 hero: ./img/24R4Mll.png
 ---
@@ -119,10 +119,10 @@ First you have Data Manipulation.
 
 ![](./img/static-barchartcode-data-b62f3f758e2a1b37cb436d66a54846d1-d9514.png)
 
-- some sizing variables (margin, width, height)
-- two scales to help with data-to-coordinates conversion (x, y)
-- load the dataset (d3.tsv) and update scale domains
-- use scales to calculate attributes during DOM manipulation
+-   some sizing variables (margin, width, height)
+-   two scales to help with data-to-coordinates conversion (x, y)
+-   load the dataset (d3.tsv) and update scale domains
+-   use scales to calculate attributes during DOM manipulation
 
 And here's the part that paints stuff on your screen
 
@@ -132,12 +132,12 @@ DOM manipulation in D3 happens via D3 selections. They're a lot like jQuery `$(s
 
 Our example does a few things here
 
-- selects the `<svg>` node (d3.select)
-- appends a grouping `<g>` node (.append) with an SVG positioning attribute (translate)
-- adds a bottom axis by appending a `<g>`, moving it, then calling `d3.axisBottom` . D3 has built-in axis generators
-- adds a left axis using the same approach but rotating the ticks
-- appends a text label "Frequency" to the left axis
-- uses `selectAll.data` to make a virtual selection of `.bar` nodes and attach some data, then for every new data value (.enter), appends a `<rect>` node and gives it attributes
+-   selects the `<svg>` node (d3.select)
+-   appends a grouping `<g>` node (.append) with an SVG positioning attribute (translate)
+-   adds a bottom axis by appending a `<g>`, moving it, then calling `d3.axisBottom` . D3 has built-in axis generators
+-   adds a left axis using the same approach but rotating the ticks
+-   appends a text label "Frequency" to the left axis
+-   uses `selectAll.data` to make a virtual selection of `.bar` nodes and attach some data, then for every new data value (.enter), appends a `<rect>` node and gives it attributes
 
 That last part is people always get lost. It looks like magic. I published my first D3 book in 2013 and I still think that's magic. 🧙‍♂️
 
@@ -155,10 +155,11 @@ Scales work like the mathematical functions you learned about in school. A domai
 
 Colored shapes in the domain map to colors in the range. No formula for this one, which makes it an ordinal scale.
 
-    <code>let shapes = d3.scaleOrdinal()
+```javascript
+let shapes = d3.scaleOrdinal()
         .domain(['triangle', 'rectangle', ...)
         .range(['red', 'orange', ...)
-    </code>
+```
 
 Once you have this scale, you can use it to translate from shapes to colors. `shapes('triangle')` returns `'red'`, rectangle is orange, etc..
 
@@ -182,10 +183,18 @@ Here's a key insight about layouts: _Layouts are the data part._
 
 You take a `forceLayout` and feed it your data. It returns an object with a `tick` event callback.
 
-    var simulation = d3.forceSimulation()
-        .force("link", d3.forceLink().id(function(d) { return d.id; }))
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(width / 2, height / 2));
+```javascript
+var simulation = d3
+    .forceSimulation()
+    .force(
+        "link",
+        d3.forceLink().id(function (d) {
+            return d.id;
+        })
+    )
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+```
 
 This `simulation` now handles everything about rendering nodes. Changes their positions on every tick callback.
 

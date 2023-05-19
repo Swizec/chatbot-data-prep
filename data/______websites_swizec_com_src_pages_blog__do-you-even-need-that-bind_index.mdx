@@ -3,16 +3,18 @@ title: "Do you even need that bind?"
 description: ""
 published: 2016-11-29
 redirect_from:
-  - /blog/do-you-even-need-that-bind/swizec/7247
+    - /blog/do-you-even-need-that-bind/swizec/7247
 categories: "Technical"
 hero: ../../../defaultHero.jpg
 ---
 
 **Codereviewer:** _"Why is this binding necessary?"_
 
+```javascript
     <Modal show={viewStore.modal.show}
            closeOnOuterClick={true}
            onClose={viewStore.closeModal.bind(viewStore)}
+```
 
 > This code follows my [Simple MobX-driven modals](https://swizec.com/blog/simple-mobxdriven-modals/) approach.
 
@@ -40,11 +42,11 @@ We have a `Store` that holds the number of `clicks` and contains an `inc` action
 
 ```javascript
 class Store {
-  @observable clicks = 0;
+    @observable clicks = 0;
 
-  @action inc() {
-    this.clicks += 1;
-  }
+    @action inc() {
+        this.clicks += 1;
+    }
 }
 ```
 
@@ -125,24 +127,25 @@ Our next step in the chain is `batchedUpdates`.
 var transaction = new ReactDefaultBatchingStrategyTransaction();
 
 var ReactDefaultBatchingStrategy = {
-  isBatchingUpdates: false,
+    isBatchingUpdates: false,
 
-  /**
-   * Call the provided function in a context within which calls to `setState`
-   * and friends are batched such that components aren't updated unnecessarily.
-   */
-  batchedUpdates: function (callback, a, b, c, d, e) {
-    var alreadyBatchingUpdates = ReactDefaultBatchingStrategy.isBatchingUpdates;
+    /**
+     * Call the provided function in a context within which calls to `setState`
+     * and friends are batched such that components aren't updated unnecessarily.
+     */
+    batchedUpdates: function (callback, a, b, c, d, e) {
+        var alreadyBatchingUpdates =
+            ReactDefaultBatchingStrategy.isBatchingUpdates;
 
-    ReactDefaultBatchingStrategy.isBatchingUpdates = true;
+        ReactDefaultBatchingStrategy.isBatchingUpdates = true;
 
-    // The code is written this way to avoid extra allocations
-    if (alreadyBatchingUpdates) {
-      callback(a, b, c, d, e);
-    } else {
-      transaction.perform(callback, null, a, b, c, d, e);
-    }
-  },
+        // The code is written this way to avoid extra allocations
+        if (alreadyBatchingUpdates) {
+            callback(a, b, c, d, e);
+        } else {
+            transaction.perform(callback, null, a, b, c, d, e);
+        }
+    },
 };
 ```
 

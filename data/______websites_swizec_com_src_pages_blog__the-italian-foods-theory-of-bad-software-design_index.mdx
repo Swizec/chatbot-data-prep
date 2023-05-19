@@ -73,6 +73,7 @@ Here's an example I've seen time and again.
 
 The storage layer keeps your data. A filesystem or database. Secretly it also holds your domain model, but we rarely talk about that.
 
+```graphql
     Article {
     	id: uuid
     	title: text
@@ -80,6 +81,7 @@ The storage layer keeps your data. A filesystem or database. Secretly it also ho
     	created_at: timestamp
     	author_id: fkey(User)
     }
+```
 
 Articles have `title`, `content`, are `created_at` a time, and belong to an author.
 
@@ -89,12 +91,12 @@ The service layer builds on top of your storage layer and adds the business logi
 
 ```javascript
 function getLatestArticlesByAuthor(author_id, count) {
-  return query(
-    `select * from Articles 
+    return query(
+        `select * from Articles 
 		 where author_id=${author_id} 
 		 order by created_at
 		 limit ${count}`
-  )
+    );
 }
 ```
 
@@ -108,12 +110,12 @@ You write the glue:
 
 ```javascript
 exports.latestArticles = async (req, res) => {
-  const { author_id } = req.params
+    const { author_id } = req.params;
 
-  const articles = ArticleService.getLatestArticlesByAuthor(author_id, 10)
+    const articles = ArticleService.getLatestArticlesByAuthor(author_id, 10);
 
-  return res.send(200).json(articles)
-}
+    return res.send(200).json(articles);
+};
 ```
 
 We snuck in some business logic! We're saying that "latest" means 10. Does that go in the controller? 🤔
@@ -171,33 +173,33 @@ On the client you then have to render these objects.
 
 ```javascript
 const LatestArticles = ({ articles, author }) => {
-  const sorted = articles.sort(
-    (a, b) => new Date(b.created_at) - new Date(a.created_at)
-  )
+    const sorted = articles.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
 
-  return (
-    <div>
-      <h2>Latest from {author.name}</h2>
-      {sorted.map((article) => (
-        <ArticleListing {...article} />
-      ))}
-    </div>
-  )
-}
+    return (
+        <div>
+            <h2>Latest from {author.name}</h2>
+            {sorted.map((article) => (
+                <ArticleListing {...article} />
+            ))}
+        </div>
+    );
+};
 ```
 
 Sort articles by `created_at` and render an `<ArticleListing>` component for each. We pass the whole article object as individual props.
 
 ```javascript
 const ArticleListing = ({ id, created_at, title, content }) => {
-  return (
-    <div>
-      <h3>{title}</h3>
-      <label className="created_at">Created at: {created_at}</label>
-      <p>{content.substr(100)}</p>
-    </div>
-  )
-}
+    return (
+        <div>
+            <h3>{title}</h3>
+            <label className="created_at">Created at: {created_at}</label>
+            <p>{content.substr(100)}</p>
+        </div>
+    );
+};
 ```
 
 Each article listing shows a `title`, the `created_at` timestamp, and the first 100 characters of the `content` as a lazy summary.
@@ -208,8 +210,8 @@ We want the `created_at` label to have a specific style and have chosen to use C
 
 ```css
 label.created_at {
-  font-size: 0.6em;
-  font-style: italic;
+    font-size: 0.6em;
+    font-style: italic;
 }
 ```
 

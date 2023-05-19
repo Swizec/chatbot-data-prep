@@ -12,11 +12,11 @@ This will soon work anywhere:
 
 ```javascript
 const ShowData = async () => {
-  const res = await fetch("/data-source")
-  const json = res.json()
+    const res = await fetch("/data-source");
+    const json = res.json();
 
-  return <p>{json.text}</p>
-}
+    return <p>{json.text}</p>;
+};
 ```
 
 Note the `async` React component, the `await` in its body, the complete lack of any loading states, effects, hooks, or libraries. It just works. You can use this component anywhere in your tree – even in a component that isn't itself async!
@@ -51,13 +51,13 @@ Yes that means that even with server components there's plenty of client-side Ja
 
 ## What async React looks like with beta NextJS
 
-Again, full code on GitHub 👉 <https://github.com/Swizec/ScholarStream.ai>. See it in action 👉 [ScholarStream.ai](https://ScholarStream.ai)
+Again, full code on GitHub 👉 https://github.com/Swizec/ScholarStream.ai. See it in action 👉 [ScholarStream.ai](https://ScholarStream.ai)
 
 The base case is to use NextJS 13's new opinionated `/app` structure:
 
-- `page.tsx` for the page
-- `layout.tsx` for the static layout
-- `loading.tsx` for the loading state
+-   `page.tsx` for the page
+-   `layout.tsx` for the static layout
+-   `loading.tsx` for the loading state
 
 ![Loading state gif](./img/Loading-state-gif7add0f.gif)
 
@@ -68,17 +68,17 @@ The base case is to use NextJS 13's new opinionated `/app` structure:
 ```typescript
 // app/[route]/page.tsx
 export default async function Home() {
-  return (
-    <main className={styles.main}>
-      <Pitch />
+    return (
+        <main className={styles.main}>
+            <Pitch />
 
-      <h2>Read about:</h2>
-      <TopicsList />
+            <h2>Read about:</h2>
+            <TopicsList />
 
-      {/* @ts-expect-error Server Component */}
-      <Feed topic="cs.AI" count={5} isLast />
-    </main>
-  )
+            {/* @ts-expect-error Server Component */}
+            <Feed topic="cs.AI" count={5} isLast />
+        </main>
+    );
 }
 ```
 
@@ -93,31 +93,33 @@ You need to tell TypeScript to expect an error when using `async` (server) compo
 ```typescript
 // app/[route]/layout.tsx
 export default function RootLayout({
-  // Layouts must accept a children prop.
-  // This will be populated with nested layouts or pages
-  children,
+    // Layouts must accept a children prop.
+    // This will be populated with nested layouts or pages
+    children,
 }: {
-  children: React.ReactNode
+    children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <Script
-        src="https://plausible.io/js/script.js"
-        data-domain="scholarstream.ai"
-      />
-      <body>
-        <nav className={styles.topNav}>
-          <Link href="/about">About</Link>
-        </nav>
-        {children}
-        <div className={styles.footer}>
-          built with reckless abandon by <a href="https://swizec.com">Swizec</a>
-          <br />
-          Thank you to arXiv for use of its open access interoperability.
-        </div>
-      </body>
-    </html>
-  )
+    return (
+        <html lang="en">
+            <Script
+                src="https://plausible.io/js/script.js"
+                data-domain="scholarstream.ai"
+            />
+            <body>
+                <nav className={styles.topNav}>
+                    <Link href="/about">About</Link>
+                </nav>
+                {children}
+                <div className={styles.footer}>
+                    built with reckless abandon by{" "}
+                    <a href="https://swizec.com">Swizec</a>
+                    <br />
+                    Thank you to arXiv for use of its open access
+                    interoperability.
+                </div>
+            </body>
+        </html>
+    );
 }
 ```
 
@@ -128,11 +130,11 @@ The [loading component](https://beta.nextjs.org/docs/routing/loading-ui) renders
 ```typescript
 // app/[route]/loading.tsx
 export default function PageLoading() {
-  return (
-    <main className={styles.main}>
-      <FeedLoader />
-    </main>
-  )
+    return (
+        <main className={styles.main}>
+            <FeedLoader />
+        </main>
+    );
 }
 ```
 
@@ -150,34 +152,34 @@ For example, here's how I load an [arXiv feed](https://arxiv.org):
 // loads list of articles
 // renders in a loop
 export const FeedInnards = async (props: FeedProps) => {
-  const { offset = 0, count = 10 } = props
+    const { offset = 0, count = 10 } = props;
 
-  let feed: arxiv.ArxivFeed
-  let papers: arxiv.ArxivFeedItem[]
+    let feed: arxiv.ArxivFeed;
+    let papers: arxiv.ArxivFeedItem[];
 
-  try {
-    feed = await arxiv.getFeed(props.topic)
-    papers = feed.items.slice(offset, count)
-  } catch (e) {
-    console.error(e)
+    try {
+        feed = await arxiv.getFeed(props.topic);
+        papers = feed.items.slice(offset, count);
+    } catch (e) {
+        console.error(e);
+
+        return (
+            <>
+                <p>Error loading feed. Try one of these topics instead:</p>
+                <TopicsList />
+            </>
+        );
+    }
 
     return (
-      <>
-        <p>Error loading feed. Try one of these topics instead:</p>
-        <TopicsList />
-      </>
-    )
-  }
-
-  return (
-    <>
-      {papers.map((paper) => (
-        // @ts-expect-error Server Component
-        <FeedItem paper={paper} key={paper.link} />
-      ))}
-    </>
-  )
-}
+        <>
+            {papers.map((paper) => (
+                // @ts-expect-error Server Component
+                <FeedItem paper={paper} key={paper.link} />
+            ))}
+        </>
+    );
+};
 ```
 
 Notice the `await` in the body of that component, that's the shiny new toy! React/NextJS shows a loading state while this component's promise is pending. You don't have to deal with that 😍
@@ -190,20 +192,23 @@ The data fetching behind my `<FeedInnards>` component looks like this:
 
 ```typescript
 export async function getFeed(category: string): Promise<ArxivFeed> {
-  const parser: Parser<Omit<ArxivFeed, "items">, ArxivFeedItem> = new Parser()
-  const feed = await fetch(
-    `http://export.arxiv.org/rss/${category}?version=1.0`,
-    {
-      next: { revalidate: TEN_HOURS },
-    }
-  ).then((r) => r.text())
+    const parser: Parser<
+        Omit<ArxivFeed, "items">,
+        ArxivFeedItem
+    > = new Parser();
+    const feed = await fetch(
+        `http://export.arxiv.org/rss/${category}?version=1.0`,
+        {
+            next: { revalidate: TEN_HOURS },
+        }
+    ).then((r) => r.text());
 
-  try {
-    const parsed = await parser.parseString(feed)
-    return parsed
-  } catch (e) {
-    throw new Error("Could not parse feed")
-  }
+    try {
+        const parsed = await parser.parseString(feed);
+        return parsed;
+    } catch (e) {
+        throw new Error("Could not parse feed");
+    }
 }
 ```
 
@@ -213,8 +218,8 @@ But notice the extra params in that fetch call:
 
 ```typescript
 await fetch(`http://export.arxiv.org/rss/${category}?version=1.0`, {
-  next: { revalidate: TEN_HOURS },
-})
+    next: { revalidate: TEN_HOURS },
+});
 ```
 
 NextJS [adds a custom param to fetch()](https://beta.nextjs.org/docs/api-reference/fetch) that lets you specify a caching behavior. You can enable/disable the cache and specify revalidation behavior.
@@ -233,15 +238,15 @@ For example when I'm [using OpenAI to create summaries](https://swizec.com/blog/
 
 ```typescript
 const getSummary = cache(async (paper: arxiv.ArxivFeedItem) => {
-  const summary = await openai.getSummary(paper)
-  return summary
-})
+    const summary = await openai.getSummary(paper);
+    return summary;
+});
 
 const PaperSummary = async (props: { paper: arxiv.ArxivFeedItem }) => {
-  const summary = await getSummary(props.paper)
+    const summary = await getSummary(props.paper);
 
-  return <p>{summary.choices[0].text}</p>
-}
+    return <p>{summary.choices[0].text}</p>;
+};
 ```
 
 Going hard on the idea that _"You should load data close to where it's used"_, I have a component that gets a `paper`, calls OpenAI to summarize, and renders a single paragraph.
@@ -260,26 +265,26 @@ For example, when you know the summary portion of a `<FeedItem>` is slower than 
 
 ```typescript
 const FeedItem = async (props: { paper: arxiv.ArxivFeedItem }) => {
-  const { paper } = props
+    const { paper } = props;
 
-  // ...
+    // ...
 
-  return (
-    <div className={feedStyles.item}>
-      // ...
-      <Suspense fallback={<RingLoader color="blue" loading />}>
-        {/* @ts-expect-error Server Component */}
-        <PaperSummary paper={paper} />
-      </Suspense>
-      <div>
-        Full paper at 👉{" "}
-        <a href={paper.link} className={feedStyles.linkPaper}>
-          {paper.title.split(/(\(|\. \()arXiv/)[0]}
-        </a>
-      </div>
-    </div>
-  )
-}
+    return (
+        <div className={feedStyles.item}>
+            // ...
+            <Suspense fallback={<RingLoader color="blue" loading />}>
+                {/* @ts-expect-error Server Component */}
+                <PaperSummary paper={paper} />
+            </Suspense>
+            <div>
+                Full paper at 👉{" "}
+                <a href={paper.link} className={feedStyles.linkPaper}>
+                    {paper.title.split(/(\(|\. \()arXiv/)[0]}
+                </a>
+            </div>
+        </div>
+    );
+};
 ```
 
 Using the `<Suspense>` boundary is like telling React to _"Render the `<FeedItem>` component, but show a `fallback` state while promises inside this part of the component tree are pending"_.
