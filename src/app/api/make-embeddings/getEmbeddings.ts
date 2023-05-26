@@ -41,10 +41,36 @@ async function fetchEmbeddingForSection(
     };
 }
 
+function splitStringIntoEqualParts(input: string, partSize: number): string[] {
+    const words = input.split(" ");
+    const parts = Math.ceil(words.length / partSize);
+
+    const result: string[] = [];
+    for (let i = 0; i < parts; i++) {
+        const currentPart = words.slice(i * partSize, i * partSize + partSize);
+        const combinedWords = currentPart.join(" ");
+        result.push(combinedWords);
+    }
+
+    return result;
+}
+
 export async function getEmbeddings(sections: Section[]) {
-    const embeddings = await Promise.all(
-        sections.map(fetchEmbeddingForSection)
-    );
+    const embeddings: SectionWithEmbedding[] = [];
+
+    for (const section of sections) {
+        console.log(section.title);
+        const chunkedSection = splitStringIntoEqualParts(section.content, 1400);
+        for (const fragment of chunkedSection) {
+            embeddings.push(
+                await fetchEmbeddingForSection({
+                    type: "section",
+                    title: section.title,
+                    content: fragment,
+                })
+            );
+        }
+    }
 
     return embeddings;
 }

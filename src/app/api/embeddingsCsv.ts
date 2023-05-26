@@ -3,12 +3,13 @@ import { SectionWithEmbedding } from "./make-embeddings/getEmbeddings";
 
 const csv = require("csv");
 
-const CSV_FILE = `${process.cwd()}/data/embedded_sections.csv`;
-
-export async function writeEmbeddingsToCSV(embeddings: SectionWithEmbedding[]) {
+export async function writeEmbeddingsToCSV(
+    filename: string,
+    embeddings: SectionWithEmbedding[]
+) {
     const columns = ["title", "content", "embedding"];
 
-    const writeStream = fs.createWriteStream(CSV_FILE);
+    const writeStream = fs.createWriteStream(filename);
     const stringifier = csv.stringify({ header: true, columns });
 
     for await (const { title, content, embedding } of embeddings) {
@@ -18,9 +19,9 @@ export async function writeEmbeddingsToCSV(embeddings: SectionWithEmbedding[]) {
     stringifier.pipe(writeStream);
 }
 
-export async function readEmbeddingsFromCSV() {
+export async function readEmbeddingsFromCSV(filename: string) {
     const readStream = fs
-        .createReadStream(CSV_FILE)
+        .createReadStream(filename)
         .pipe(csv.parse({ from_line: 2 }));
 
     const data = [];
